@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张拉详情 - 会话 #{{ session_id }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="page-session-detail">
+    <header class="app-topbar" role="banner">
+        <div class="topbar-brand">
+            <a href="/" class="topbar-brand-link" aria-label="返回概览">
+                <span class="brand-mark" aria-hidden="true"></span>
+            </a>
+            <div>
+                <div class="brand-title">桥梁预应力张拉监测</div>
+                <div class="brand-sub">会话详情与预警及警告</div>
+            </div>
+        </div>
+        <nav class="topbar-nav" aria-label="主导航">
+            <a href="/" class="topbar-nav-link">首页</a>
+            <a href="/realtime" class="topbar-nav-link">实时监测</a>
+            <a href="/history" class="topbar-nav-link is-active">历史归档</a>
+        </nav>
+        <div class="topbar-meta">
+            <a href="/history" class="topbar-link">返回列表</a>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="page-header">
+            <div>
+                <a href="/history" class="back-link">← 返回历史列表</a>
+                <h1>张拉详情 · 会话 #{{ session_id }}</h1>
+                <p class="page-header-lead">对历史张拉数据的详细展示，包括基础信息、预警及警告、力值曲线与位移曲线。</p>
+            </div>
+        </div>
+
+        <div class="detail-info-card" id="detail-info">
+            <div class="info-grid info-grid--session-detail">
+                <div class="info-item">
+                    <span class="info-label">开始时间</span>
+                    <span class="info-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">结束时间</span>
+                    <span class="info-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">目标力值</span>
+                    <span class="info-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">严重异常数量</span>
+                    <span class="info-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">数据点数</span>
+                    <span class="info-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">状态</span>
+                    <span class="info-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">实际伸长量</span>
+                    <span class="info-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">实际张拉力</span>
+                    <span class="info-value">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">目标力值偏差率</span>
+                    <span class="info-value">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="session-detail-workspace">
+            <section class="session-detail-panel session-detail-panel--anomalies" aria-label="预警及警告">
+                <div class="session-detail-panel-head">
+                    <h3>预警及警告 <span class="badge" id="anomaly-count-badge">0</span></h3>
+                </div>
+                <div class="session-detail-panel-body">
+                    <div class="table-wrapper session-detail-anomaly-table-wrap">
+                        <table class="anomaly-table">
+                            <thead>
+                                <tr>
+                                    <th>时间</th>
+                                    <th class="anomaly-th-filter">
+                                        <label class="anomaly-th-filter-btn">
+                                            <span class="anomaly-th-filter-ui">
+                                                <span class="anomaly-th-filter-title">阶段</span>
+                                                <span class="anomaly-th-filter-chevron" aria-hidden="true"></span>
+                                            </span>
+                                            <select id="anomaly-filter-phase" class="anomaly-th-filter-select" aria-label="按阶段筛选">
+                                                <option value="">全部阶段</option>
+                                                <option value="loading">张拉加载</option>
+                                                <option value="holding">持荷</option>
+                                                <option value="unloading">卸载</option>
+                                            </select>
+                                        </label>
+                                    </th>
+                                    <th class="anomaly-th-filter">
+                                        <label class="anomaly-th-filter-btn">
+                                            <span class="anomaly-th-filter-ui">
+                                                <span class="anomaly-th-filter-title">来源</span>
+                                                <span class="anomaly-th-filter-chevron" aria-hidden="true"></span>
+                                            </span>
+                                            <select id="anomaly-filter-source" class="anomaly-th-filter-select" aria-label="按来源筛选">
+                                                <option value="">全部来源</option>
+                                                <option value="rule_engine">规则引擎</option>
+                                                <option value="if_lof">IF/LOF</option>
+                                                <option value="tcn">TCN</option>
+                                            </select>
+                                        </label>
+                                    </th>
+                                    <th class="anomaly-th-filter">
+                                        <label class="anomaly-th-filter-btn">
+                                            <span class="anomaly-th-filter-ui">
+                                                <span class="anomaly-th-filter-title">类型</span>
+                                                <span class="anomaly-th-filter-chevron" aria-hidden="true"></span>
+                                            </span>
+                                            <select id="anomaly-filter-type" class="anomaly-th-filter-select" aria-label="按类型筛选">
+                                                <option value="">全部类型</option>
+                                            </select>
+                                        </label>
+                                    </th>
+                                    <th class="anomaly-th-filter">
+                                        <label class="anomaly-th-filter-btn">
+                                            <span class="anomaly-th-filter-ui">
+                                                <span class="anomaly-th-filter-title">异常等级</span>
+                                                <span class="anomaly-th-filter-chevron" aria-hidden="true"></span>
+                                            </span>
+                                            <select id="anomaly-filter-severity" class="anomaly-th-filter-select" aria-label="按异常等级筛选">
+                                                <option value="">全部等级</option>
+                                                <option value="critical">critical</option>
+                                                <option value="warning">warning</option>
+                                            </select>
+                                        </label>
+                                    </th>
+                                    <th>详情</th>
+                                </tr>
+                            </thead>
+                            <tbody id="anomaly-tbody">
+                                <tr>
+                                    <td colspan="6" class="table-loading-cell">加载中…</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="session-detail-panel chart-container" aria-label="张拉力值曲线">
+                <div class="chart-head">
+                    <h3>张拉数据 · 力值曲线</h3>
+                    <span class="chart-tag">kN</span>
+                </div>
+                <div class="chart-container-inner">
+                    <canvas id="history-force-chart"></canvas>
+                </div>
+            </section>
+
+            <section class="session-detail-panel chart-container" aria-label="位移曲线">
+                <div class="chart-head">
+                    <h3>张拉数据 · 位移曲线</h3>
+                    <span class="chart-tag">mm</span>
+                </div>
+                <div class="chart-container-inner">
+                    <canvas id="history-dis-chart"></canvas>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const SESSION_ID = {{ session_id }};
+    </script>
+    <script src="{{ url_for('static', filename='js/session_detail.js') }}"></script>
+</body>
+</html>

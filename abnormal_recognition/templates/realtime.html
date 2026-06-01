@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时张拉监测</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+</head>
+<body class="page-realtime">
+    <header class="app-topbar" role="banner">
+        <div class="topbar-brand">
+            <a href="/" class="topbar-brand-link" aria-label="返回概览">
+                <span class="brand-mark" aria-hidden="true"></span>
+            </a>
+            <div>
+                <div class="brand-title">桥梁预应力张拉监测</div>
+                <div class="brand-sub">实时力值 / 位移 / TCN 与异常检测</div>
+            </div>
+        </div>
+        <nav class="topbar-nav" aria-label="主导航">
+            <a href="/" class="topbar-nav-link">首页</a>
+            <a href="/realtime" class="topbar-nav-link is-active">实时监测</a>
+            <a href="/history" class="topbar-nav-link">历史归档</a>
+        </nav>
+        <div class="topbar-meta">
+            <span class="topbar-clock" id="topbar-clock" aria-live="polite">--:--:--</span>
+            <span class="conn-pill conn-warn" id="conn-status" title="WebSocket 状态">等待连接</span>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="page-header page-header--centered">
+            <div class="page-header-inner">
+                <a href="/" class="back-link">← 返回主页</a>
+                <div class="page-title-group">
+                    <h1 class="page-title">实时张拉监测</h1>
+                    <span class="page-header-lead">采集通道在线时自动刷新曲线与右侧预警及警告列表；停止或完成后可前往历史数据查看归档。</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="panel" aria-labelledby="control-heading">
+            <div class="panel-header">
+                <span class="panel-title" id="control-heading">作业控制</span>
+            </div>
+            <div class="panel-body">
+                <div class="control-panel">
+                    <div class="control-group">
+                        <label for="target-force">目标力值 (kN)</label>
+                        <input type="number" id="target-force" value="1000" min="0" step="10" inputmode="decimal">
+                    </div>
+                    <div class="control-buttons">
+                        <button type="button" class="btn btn-primary" id="btn-start" onclick="startTension()">开始张拉</button>
+                        <button type="button" class="btn btn-danger" id="btn-stop" onclick="stopTension()" disabled>停止张拉</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="kpi-strip" role="group" aria-label="关键运行指标">
+            <div class="kpi-tile">
+                <span class="label">当前阶段</span>
+                <span class="value" id="current-phase">--</span>
+            </div>
+            <div class="kpi-tile">
+                <span class="label">当前力值</span>
+                <span class="value" id="current-force">-- kN</span>
+            </div>
+            <div class="kpi-tile">
+                <span class="label">目标力值</span>
+                <span class="value" id="display-target">-- kN</span>
+            </div>
+            <div class="kpi-tile">
+                <span class="label">TCN 残差</span>
+                <span class="value" id="tcn-residual">--</span>
+            </div>
+        </div>
+
+        <div class="kpi-strip kpi-strip--post" role="group" aria-label="张拉完成摘要">
+            <div class="kpi-tile kpi-tile--post">
+                <span class="label">实际伸长量</span>
+                <span class="value" id="post-final-elongation">--</span>
+            </div>
+            <div class="kpi-tile kpi-tile--post">
+                <span class="label">实际张拉力</span>
+                <span class="value" id="post-actual-tension-kn">--</span>
+            </div>
+            <div class="kpi-tile kpi-tile--post">
+                <span class="label">目标力值偏差率</span>
+                <span class="value" id="post-target-force-deviation-pct">--</span>
+            </div>
+            <div class="kpi-tile kpi-tile--post">
+                <span class="label">严重异常出现次数</span>
+                <span class="value" id="post-critical-anomaly-count">--</span>
+            </div>
+        </div>
+
+        <div class="realtime-workspace">
+            <div class="realtime-charts-col">
+                <div class="chart-section-vertical">
+                    <div class="chart-container">
+                        <div class="chart-head">
+                            <h3>力值曲线与 TCN 预测</h3>
+                            <span class="chart-tag">kN · 时间轴</span>
+                        </div>
+                        <div class="chart-container-inner">
+                            <canvas id="force-chart" aria-label="力值与预测曲线"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-head">
+                            <h3>位移曲线</h3>
+                            <span class="chart-tag">mm · 时间轴</span>
+                        </div>
+                        <div class="chart-container-inner">
+                            <canvas id="displacement-chart" aria-label="位移曲线"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <aside class="realtime-anomaly-col" aria-label="预警与 TCN 预测">
+                <section class="anomaly-section panel anomaly-panel--dock" aria-labelledby="anomaly-heading">
+                    <div class="panel-header">
+                        <h3 id="anomaly-heading">预警及警告 <span class="badge" id="anomaly-count">0</span></h3>
+                    </div>
+                    <div class="panel-body panel-body--anomaly-dock">
+                        <div class="anomaly-list" id="anomaly-list">
+                            <p class="no-anomaly">暂无预警及警告</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="anomaly-section panel anomaly-panel--dock anomaly-panel--tcn" aria-labelledby="tcn-anomaly-heading">
+                    <div class="panel-header panel-header--tcn">
+                        <h3 id="tcn-anomaly-heading">TCN 预测 <span class="badge badge--tcn" id="tcn-anomaly-count">0</span></h3>
+                    </div>
+                    <div class="panel-body panel-body--anomaly-dock">
+                        <div class="anomaly-list anomaly-list--tcn" id="tcn-anomaly-list">
+                            <p class="no-anomaly">暂无 TCN 预测预警</p>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <script>
+        window.APP_CONFIG = window.APP_CONFIG || {};
+        window.APP_CONFIG.realtimeChartMaxPoints = {{ chart_max_points | int }};
+    </script>
+    <script src="/static/js/realtime.js"></script>
+</body>
+</html>

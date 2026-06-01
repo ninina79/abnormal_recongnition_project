@@ -1,0 +1,36 @@
+{
+  "input_window": 10,
+  "predict_horizon": 5,
+  "slide_step": 2,
+  "n_input_features": 18,
+  "n_target_features": 3,
+  "input_cols": [
+    "norm_force_left",
+    "norm_force_right",
+    "norm_force_avg",
+    "norm_force_diff",
+    "norm_force_rate",
+    "norm_left_force_rate",
+    "norm_right_force_rate",
+    "norm_force_rate_diff",
+    "norm_force_acc",
+    "dis_left",
+    "dis_right",
+    "total_delta_dis",
+    "dis_diff",
+    "dis_rate",
+    "force_disp_ratio",
+    "left_right_force_diff",
+    "stiffness_ratio_norm",
+    "force_std_5s_norm"
+  ],
+  "target_cols": [
+    "norm_force_avg",
+    "norm_force_diff",
+    "norm_force_rate"
+  ],
+  "n_train": 157432,
+  "n_val": 27782,
+  "val_ratio": 0.15,
+  "random_seed": 42
+}

@@ -1,0 +1,91 @@
+{
+  "model_path": "E:\\ABNORMAL_RECOGNITION\\DATA\\models\\fusion_model_bundle.pkl",
+  "training_data": "E:\\ABNORMAL_RECOGNITION\\DATA\\processed\\rule_engine_classified\\1_normal\\1_normal.csv",
+  "n_training_samples": 55887,
+  "n_features": 22,
+  "feature_cols": [
+    "force_left",
+    "force_right",
+    "force_avg",
+    "force_diff",
+    "force_diff_ratio",
+    "left_force_rate",
+    "right_force_rate",
+    "force_rate",
+    "force_rate_diff",
+    "force_rate_ratio",
+    "left_force_acc",
+    "right_force_acc",
+    "force_acc",
+    "total_delta_dis",
+    "dis_diff",
+    "left_dis_rate",
+    "right_dis_rate",
+    "dis_rate_diff",
+    "stiffness_ratio",
+    "force_std_5s",
+    "force_diff_std_5s",
+    "force_rate_std_5s"
+  ],
+  "iforest_params": {
+    "n_estimators": 300,
+    "contamination": 0.01
+  },
+  "lof_params": {
+    "contamination": 0.01,
+    "n_neighbors_ratio": 0.005
+  },
+  "fusion_weights": {
+    "iforest": 0.5,
+    "lof": 0.5
+  },
+  "score_stats": {
+    "iforest": {
+      "q01": -0.22038963973229334,
+      "q99": -1.298120343314578e-17
+    },
+    "lof": {
+      "q01": -0.5356479256445886,
+      "q99": -0.013870723707912223
+    }
+  },
+  "warning_threshold": 0.5846592519403447,
+  "alarm_threshold": 0.7485666751065142,
+  "training_distribution": {
+    "normal": 53092,
+    "warning": 2236,
+    "alarm": 559
+  },
+  "fusion_score_stats": {
+    "mean": 0.2730206364306133,
+    "std": 0.15792617103558584,
+    "min": 0.0,
+    "max": 1.0,
+    "p50": 0.24027418903352118,
+    "p90": 0.49826970034962514,
+    "p95": 0.5846592519403447,
+    "p99": 0.7485666751065142
+  },
+  "evaluation": {
+    "warning": {
+      "total": 34261,
+      "detected_alarm": 315,
+      "detected_warning": 1420,
+      "detected_normal": 32526,
+      "detection_rate": 0.05064067014973293,
+      "fusion_mean": 0.2820873626430297,
+      "fusion_max": 1.0,
+      "fusion_min": 0.0
+    },
+    "alarm": {
+      "total": 56566,
+      "detected_alarm": 14259,
+      "detected_warning": 11113,
+      "detected_normal": 31194,
+      "detection_rate": 0.4485379910193402,
+      "fusion_mean": 0.5330235501769754,
+      "fusion_max": 1.0,
+      "fusion_min": 0.0048578335263450186
+    }
+  }
+}

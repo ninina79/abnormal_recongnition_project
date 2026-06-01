@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桥梁预应力张拉施工实时异常识别系统</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="page-home">
+    <header class="app-topbar" role="banner">
+        <div class="topbar-brand">
+            <a href="/" class="topbar-brand-link" aria-label="返回概览">
+                <span class="brand-mark" aria-hidden="true"></span>
+            </a>
+            <div>
+                <div class="brand-title">桥梁预应力张拉监测</div>
+                <div class="brand-sub">主页</div>
+            </div>
+        </div>
+        <nav class="topbar-nav" aria-label="主导航">
+            <a href="/" class="topbar-nav-link is-active">概览</a>
+            <a href="/realtime" class="topbar-nav-link">实时监测</a>
+            <a href="/history" class="topbar-nav-link">历史归档</a>
+        </nav>
+        <div class="topbar-meta">
+            <span class="topbar-status-pill" title="服务状态"><span class="topbar-status-dot" aria-hidden="true"></span>系统就绪</span>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="container container--home">
+            <header class="main-header">
+                <div class="logo-area">
+                    <div class="product-badge">监测平台</div>
+                    <h1>桥梁预应力张拉实时异常检测系统</h1>
+                    <p class="subtitle">Real-time Abnormal Detection System for Prestressed Tensioning of Bridges</p>
+                </div>
+            </header>
+
+            <section class="home-features" aria-label="核心能力">
+                <article class="home-feature-card">
+                    <div class="home-feature-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 6-7"/></svg>
+                    </div>
+                    <h3 class="home-feature-title">实时曲线与预测</h3>
+                    <p class="home-feature-desc">力值、位移双通道曲线，叠加 TCN 模型趋势预测，便于实时观察数据走向。</p>
+                </article>
+                <article class="home-feature-card">
+                    <div class="home-feature-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                    </div>
+                    <h3 class="home-feature-title">多引擎异常检测</h3>
+                    <p class="home-feature-desc">规则引擎、孤立森林与 LOF、TCN 残差等多源结果统一呈现，降低漏报与误报排查成本。</p>
+                </article>
+                <article class="home-feature-card">
+                    <div class="home-feature-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                    </div>
+                    <h3 class="home-feature-title">全记录张拉日志</h3>
+                    <p class="home-feature-desc">每次张拉独立会话，保留数据点与异常警告明细，支持事后复盘。</p>
+                </article>
+            </section>
+
+            <div class="nav-cards">
+                <a href="/realtime" class="nav-card">
+                    <div class="card-icon" aria-hidden="true">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 12h2M11 10h2M15 14h2M19 8h2"/></svg>
+                    </div>
+                    <h2>实时张拉监测</h2>
+                    <p>启动张拉过程，实时查看力值、位移曲线及异常警告。</p>
+                    <div class="card-arrow">进入监测 →</div>
+                </a>
+                <a href="/history" class="nav-card">
+                    <div class="card-icon" aria-hidden="true">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h6M7 16h4"/></svg>
+                    </div>
+                    <h2>历史数据查看</h2>
+                    <p>查看历次张拉记录、数据曲线及异常分析报告。</p>
+                    <div class="card-arrow">打开归档 →</div>
+                </a>
+            </div>
+
+            <footer class="main-footer">
+                <p class="home-copyright">桥梁预应力张拉施工实时异常识别系统</p>
+            </footer>
+        </div>
+    </main>
+</body>
+</html>

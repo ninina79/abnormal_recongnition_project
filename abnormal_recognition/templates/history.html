@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史数据查看</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="page-history">
+    <header class="app-topbar" role="banner">
+        <div class="topbar-brand">
+            <a href="/" class="topbar-brand-link" aria-label="返回概览">
+                <span class="brand-mark" aria-hidden="true"></span>
+            </a>
+            <div>
+                <div class="brand-title">桥梁预应力张拉监测</div>
+                <div class="brand-sub">历史会话与数据归档</div>
+            </div>
+        </div>
+        <nav class="topbar-nav" aria-label="主导航">
+            <a href="/" class="topbar-nav-link">首页</a>
+            <a href="/realtime" class="topbar-nav-link">实时监测</a>
+            <a href="/history" class="topbar-nav-link is-active">历史归档</a>
+        </nav>
+        <div class="topbar-meta"></div>
+    </header>
+
+    <main class="app-main">
+        <div class="page-header page-header--centered">
+            <div class="page-header-inner">
+                <a href="/" class="back-link">← 返回主页</a>
+                <div class="page-title-group">
+                    <h1 class="page-title">历史数据查看</h1>
+                    <span class="page-header-lead">按会话浏览张拉过程，支持查看详情曲线与异常明细，并可删除相关记录。</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <h3>张拉记录列表</h3>
+            <div class="table-wrapper">
+                <table class="session-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>目标力值</th>
+                            <th>数据点数</th>
+                            <th>异常数</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="session-tbody">
+                        <tr>
+                            <td colspan="8" class="table-loading-cell">加载中…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/history.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿[
+    {
+        "id": "719763772729856001",
+        "pullingTaskId": "719762467806384128",
+        "no": "N1",
+        "targetPulling": "600.01",
+        "targetPullingM": "600.01",
+        "standardPulling": "600.01",
+        "monitorPulling": 591.04,
+        "monitorPullingM": 591.04,
+        "pullingOffset": -1.49498,
+        "theoryDis": 1.0,
+        "monitorDis": 0.000261799,
+        "monitorDisM": 0.000261799,
+        "disOffset": -99.9738,
+        "result": "0",
+        "resultM": "0",
+        "remark": null,
+        "testPulling": 576.264,
+        "testOffset": -3.956,
+        "testResult": "0",
+        "standardPullingC": 600.0,
+        "exceptionStatus": "-1"
+    }
+]
